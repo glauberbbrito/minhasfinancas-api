@@ -1,8 +1,10 @@
 package com.gbarreto.minhasfinancas.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Example;
@@ -29,6 +31,7 @@ public class LancamentoServiceImpl implements LancamentoService {
 	@Transactional
 	public Lancamento salvar(Lancamento lancamento) {
 		lancamento.setStatus(StatusLancamento.PENDENTE);
+		lancamento.setDataCadastro(Calendar.getInstance());
 		validar(lancamento);
 		return lancamentoRepository.save(lancamento);
 	}
@@ -84,6 +87,11 @@ public class LancamentoServiceImpl implements LancamentoService {
 		if(lancamento.getTipo() == null)
 			throw new RegraNegocioException("Informe um tipo de lançamento.");
 		
+	}
+
+	@Override
+	public Optional<Lancamento> obterPorId(Long id) {
+		return lancamentoRepository.findById(id);
 	}
 
 }

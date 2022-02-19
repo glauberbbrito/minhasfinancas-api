@@ -12,15 +12,14 @@ import com.gbarreto.minhasfinancas.exception.ErroAutenticacao;
 import com.gbarreto.minhasfinancas.model.entity.Usuario;
 import com.gbarreto.minhasfinancas.service.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-	private UsuarioService usuarioService;
-	
-	public UsuarioController( UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
-	}
+	private final UsuarioService usuarioService;
 	
 	@PostMapping("/autenticar")
 	public ResponseEntity autenticar(@RequestBody UsuarioDTO usuarioDTO) {
