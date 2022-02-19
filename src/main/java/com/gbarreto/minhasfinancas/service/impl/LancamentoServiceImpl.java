@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.gbarreto.minhasfinancas.exception.RegraNegocioException;
 import com.gbarreto.minhasfinancas.model.entity.Lancamento;
 import com.gbarreto.minhasfinancas.model.enumeration.StatusLancamento;
+import com.gbarreto.minhasfinancas.model.enumeration.TipoLancamento;
 import com.gbarreto.minhasfinancas.repository.LancamentoRepository;
 import com.gbarreto.minhasfinancas.service.LancamentoService;
 
@@ -92,6 +93,21 @@ public class LancamentoServiceImpl implements LancamentoService {
 	@Override
 	public Optional<Lancamento> obterPorId(Long id) {
 		return lancamentoRepository.findById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BigDecimal obterSaldoPorUsuario(Long id) {
+		BigDecimal receitas = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+		BigDecimal despesas = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+		
+		if (receitas == null)
+			receitas = BigDecimal.ZERO;
+		
+		if (despesas == null)
+			despesas = BigDecimal.ZERO;
+		
+		return receitas.subtract(despesas);
 	}
 
 }
